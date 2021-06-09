@@ -24,11 +24,7 @@ namespace API.Repositories
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync() => await _db.Users
                 .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
-
-        public async Task<LoginDto> Login(LoginDto loginDto) => await _db.Users
-                .ProjectTo<LoginDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(x => x.Username == loginDto.Username);
-
+                
         public async Task<bool> Register(AppUser user)
         {
             await _db.Users.AddAsync(user);
