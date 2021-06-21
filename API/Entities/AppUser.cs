@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using API.Extensions;
+using Mapster;
 
 namespace API.Entities
 {

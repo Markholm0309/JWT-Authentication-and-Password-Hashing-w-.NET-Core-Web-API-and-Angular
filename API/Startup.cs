@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Mapster;
 
 namespace API
 {
@@ -15,6 +16,7 @@ namespace API
         public Startup(IConfiguration config)
         {
             _config = config;
+            TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
         }
 
         public void ConfigureServices(IServiceCollection services)

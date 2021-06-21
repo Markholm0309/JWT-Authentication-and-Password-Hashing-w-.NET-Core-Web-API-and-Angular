@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +10,8 @@ using API.Entities;
 using API.Interfaces;
 using API.Services;
 using AutoMapper;
+using Mapster;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,30 +22,33 @@ namespace API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ITokenService _tokenService;
-        private readonly IMapper _mapper;
         private readonly DataContext _db;
         private readonly IAccountRepository _accountRepository;
         private readonly IHashService _hashService;
 
         public AccountController(IAccountRepository accountRepository, DataContext dataContext,
-            ITokenService tokenService, IMapper mapper, IHashService hashService)
+            ITokenService tokenService, IHashService hashService)
         {
             _hashService = hashService;
             _accountRepository = accountRepository;
             _db = dataContext;
-            _mapper = mapper;
             _tokenService = tokenService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers() => Ok(await _db.Users.ToListAsync());
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+        {
+            var users = await _accountRepository.GetAllUsersAsync();
+
+            return Ok(users.Adapt<IEnumerable<AppUser>, IEnumerable<UserDto>>());
+        }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
 
-            var user = _mapper.Map<AppUser>(registerDto);
+            var user = registerDto.Adapt<RegisterDto, AppUser>();
 
             user.UserName = registerDto.Username.ToLower();
 
@@ -48,11 +56,10 @@ namespace API.Controllers
 
             await _accountRepository.Register(user);
 
-            return new UserDto
-            {
-                Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
+            var returnDto = user.Adapt<AppUser, UserDto>();
+            returnDto.Token = _tokenService.CreateToken(user);
+
+            return StatusCode(StatusCodes.Status201Created, returnDto);
         }
 
         [HttpPost("login")]
@@ -73,7 +80,7 @@ namespace API.Controllers
 
             return new UserDto
             {
-                Username = user.UserName,
+                UserName = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
         }

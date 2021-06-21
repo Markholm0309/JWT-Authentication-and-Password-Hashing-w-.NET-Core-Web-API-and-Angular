@@ -1,5 +1,4 @@
 using API.Data;
-using API.Helpers;
 using API.Interfaces;
 using API.Repositories;
 using API.Services;
@@ -16,7 +15,6 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IHashService, HashService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         
             services.AddDbContext<DataContext>(options =>
             {

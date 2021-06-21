@@ -7,7 +7,7 @@ namespace API.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<IEnumerable<UserDto>> GetAllUsersAsync();
+        Task<IEnumerable<AppUser>> GetAllUsersAsync();
         Task<bool> Register(AppUser appUser);
         Task<bool> IsExists(string username);
         Task<bool> SaveAllAsync();
