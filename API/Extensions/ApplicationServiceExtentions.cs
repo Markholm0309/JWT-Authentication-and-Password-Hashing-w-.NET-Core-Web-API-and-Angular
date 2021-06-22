@@ -14,7 +14,6 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {            
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IHashService, HashService>();
             services.AddScoped<ILoggerService, LoggerService>();
         
             services.AddDbContext<DataContext>(options =>
