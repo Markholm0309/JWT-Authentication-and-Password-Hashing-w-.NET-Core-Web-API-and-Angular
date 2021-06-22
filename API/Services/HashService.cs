@@ -1,8 +1,8 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using API.Entities;
 using API.Interfaces;
+using DAL.Entities;
 
 namespace API.Services
 {
