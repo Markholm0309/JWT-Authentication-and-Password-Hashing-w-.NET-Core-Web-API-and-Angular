@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Interfaces

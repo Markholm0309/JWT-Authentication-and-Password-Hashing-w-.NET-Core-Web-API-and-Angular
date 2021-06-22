@@ -14,7 +14,6 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {            
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IHashService, HashService>();
             services.AddScoped<ILoggerService, LoggerService>();
         
             services.AddDbContext<DataContext>(options =>
@@ -22,7 +21,7 @@ namespace API.Extensions
                 options.UseSqlite(config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("DAL"));
             });
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
             
