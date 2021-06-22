@@ -1,8 +1,8 @@
 using API.Data;
-using API.Helpers;
 using API.Interfaces;
-using API.Repositories;
 using API.Services;
+using DAL.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,14 +15,17 @@ namespace API.Extensions
         {            
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IHashService, HashService>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            services.AddScoped<ILoggerService, LoggerService>();
         
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlite(config.GetConnectionString("DefaultConnection"));
+                options.UseSqlite(config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("DAL"));
             });
 
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>();
+            
             return services;
         }
     }

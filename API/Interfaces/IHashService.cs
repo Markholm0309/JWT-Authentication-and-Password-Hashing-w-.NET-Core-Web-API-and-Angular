@@ -1,4 +1,4 @@
-using API.Entities;
+using DAL.Entities;
 
 namespace API.Interfaces
 {

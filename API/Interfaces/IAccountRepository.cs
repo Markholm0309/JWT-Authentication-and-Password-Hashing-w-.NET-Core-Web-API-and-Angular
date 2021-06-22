@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.DTOs;
-using API.Entities;
+using DAL.Entities;
 
 namespace API.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<IEnumerable<UserDto>> GetAllUsersAsync();
+        Task<IEnumerable<AppUser>> GetAllUsersAsync();
         Task<bool> Register(AppUser appUser);
         Task<bool> IsExists(string username);
         Task<bool> SaveAllAsync();
